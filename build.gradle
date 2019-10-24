@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.ititus'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_12
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    // implementation group: 'org.apache.bcel', name: 'bcel', version: '6.3.1'
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation group: 'org.json', name: 'json', version: '20180813'
+    implementation group: 'io.github.ititus', name: 'ititus-commons', version: '1.0.0+'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+}

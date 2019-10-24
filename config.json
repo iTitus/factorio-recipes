@@ -1,0 +1,38 @@
+{
+    "dumpLuaGlobals": false,
+    "mode": "normal",
+    "offlineMode": false,
+    "outputDir": "output",
+    "factorioDataDir": "output/factorio-data",
+    "dotDir": "output/dot",
+    "baseItems": [
+        "copper-plate",
+        "iron-plate",
+        "steel-plate",
+        "coal",
+        "stone",
+        "stone-brick",
+        "electronic-circuit",
+        "advanced-circuit",
+        "processing-unit",
+        "water",
+        "heavy-oil",
+        "light-oil",
+        "petroleum-gas",
+        "sulfuric-acid"
+    ],
+    "graphvizDir": "C:/Program Files/Graphviz 2.41.20190326.1719/bin",
+    "recipeWhitelist": ["solid-fuel-from-light-oil"],
+    "verbose": true,
+    "craftingMachines": {
+        "chemistry": "chemical-plant",
+        "rocket-building": "rocket-silo",
+        "centrifuging-crafting": "centrifuging",
+        "crafting": "assembling-machine-3",
+        "advanced-crafting": "assembling-machine-3",
+        "oil-processing": "oil-refinery",
+        "basic-crafting": "assembling-machine-3",
+        "crafting-with-fluid": "assembling-machine-3",
+        "smelting": "electric-furnace"
+    }
+}
