@@ -5,7 +5,7 @@ plugins {
 group 'io.github.ititus'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_12
+sourceCompatibility = JavaVersion.VERSION_13
 
 repositories {
     mavenLocal()
