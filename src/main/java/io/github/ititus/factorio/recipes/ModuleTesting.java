@@ -19,7 +19,8 @@ import java.util.stream.IntStream;
 public class ModuleTesting {
 
     public static void main(String[] args) {
-        labSpeed();
+        craftingMachine();
+        //labSpeed();
     }
 
     private static void craftingMachine() {
@@ -37,12 +38,12 @@ public class ModuleTesting {
         modules.forEach(System.out::println);
         System.out.println();
 
-        String machineName = "assembling-machine-3"; // "chemical-plant";
+        String machineName = "rocket-silo"; //"assembling-machine-3"; // "chemical-plant";
         CraftingMachine machine = craftingMachines.get(machineName);
         System.out.println(machine);
         System.out.println();
 
-        int beaconCount = 8;
+        int beaconCount = 20;//8;
 
         BigRational baseCraftingSpeed = machine.getCraftingSpeed();
         BigRational baseProductivityBonus = machine.getBaseProductivity();
@@ -54,7 +55,8 @@ public class ModuleTesting {
                 .orElse(ModuleEffect.NO_EFFECT)
                 .multiply(BigRationalConstants.ONE_OVER_TWO);
 
-        ModuleEffect outerEffect = machine.filter(beaconEffect.add(ModuleEffect.builder().productivity(baseProductivityBonus).build()));
+        ModuleEffect outerEffect =
+                machine.filter(beaconEffect.add(ModuleEffect.builder().productivity(baseProductivityBonus).build()));
 
         System.out.println("baseCraftingSpeed=" + baseCraftingSpeed);
         System.out.println("baseProductivityBonus=" + baseProductivityBonus);
@@ -69,15 +71,20 @@ public class ModuleTesting {
         System.out.println("moduleSlots=" + slots);
 
         List<List<Module>> permutations = Permutations.permute(modules, slots);
-        // permutations.stream().map(l -> CollectionUtil.deepMap(l, Module::getName)).forEachOrdered(System.out::println);
+        // permutations.stream().map(l -> CollectionUtil.deepMap(l, Module::getName)).forEachOrdered(System
+        // .out::println);
 
         permutations.stream()
                 .map(p -> new Object() {
                     List<Module> modules = p;
-                    ModuleEffect effect = p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
-                    BigRational speed = baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
-                    BigRational effectiveSpeed = speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
-                    BigRational demand = BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                    ModuleEffect effect =
+                            p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
+                    BigRational speed =
+                            baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
+                    BigRational effectiveSpeed =
+                            speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                    BigRational demand =
+                            BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
                 })
                 .sorted(Comparator.comparing(o -> o.effectiveSpeed))
                 .map(o -> CollectionUtil.deepMap(o.modules, Module::getName) + ": speedBonus=" + o.effect.getSpeedBonus() + " | productivityBonus=" + o.effect.getProductivityBonus() + " | speed=" + o.speed + " | effSpeed=" + o.effectiveSpeed + " | consumption=" + o.demand)
@@ -106,6 +113,8 @@ public class ModuleTesting {
                 .orElse(ModuleEffect.NO_EFFECT)
                 .multiply(BigRationalConstants.ONE_OVER_TWO);
 
+        // beaconEffect = ModuleEffect.NO_EFFECT;
+
         BigRational baseResearchSpeed = lab.getResearchingSpeed();
         BigRational researchSpeedBonusThroughTech = BigRational.of(2.5);
         BigRational baseProductivityBonus = lab.getBaseProductivity();
@@ -117,10 +126,14 @@ public class ModuleTesting {
         Permutations.permute(modules, slots).stream()
                 .map(p -> new Object() {
                     List<Module> modules = p;
-                    ModuleEffect effect = p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
-                    BigRational speed = baseResearchSpeed.multiply(BigRationalConstants.ONE.add(researchSpeedBonusThroughTech)).multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
-                    BigRational effectiveSpeed = speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
-                    BigRational demand = BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                    ModuleEffect effect =
+                            p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
+                    BigRational speed =
+                            baseResearchSpeed.multiply(BigRationalConstants.ONE.add(researchSpeedBonusThroughTech)).multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
+                    BigRational effectiveSpeed =
+                            speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                    BigRational demand =
+                            BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
                 })
                 .sorted(Comparator.comparing(o -> o.effectiveSpeed))
                 .map(o -> CollectionUtil.deepMap(o.modules, Module::getName) + ": speedBonus=" + o.effect.getSpeedBonus() + " | productivityBonus=" + o.effect.getProductivityBonus() + " | speed=" + o.speed + " | effSpeed=" + o.effectiveSpeed + " | consumption=" + o.demand)

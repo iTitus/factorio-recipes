@@ -110,7 +110,18 @@ public class FactorioRecipes {
                     String outputItem = recipe.getName();
                     RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, outputItem);
                     tree.findOptimalRatio();
+                } else if (recipe.getName().endsWith("-robot")) {
+                    System.out.println("#".repeat(80));
+                    String outputItem = recipe.getName();
+                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, outputItem);
+                    tree.findOptimalRatio();
                 }
+            }
+
+            for (String misc : new String[] { "rail", "electric-engine-unit" }) {
+                System.out.println("#".repeat(80));
+                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, misc);
+                tree.findOptimalRatio();
             }
 
             for (String circuit : new String[] { "electronic-circuit", "advanced-circuit", "processing-unit" }) {
