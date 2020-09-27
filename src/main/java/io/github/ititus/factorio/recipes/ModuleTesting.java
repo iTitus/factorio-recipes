@@ -14,36 +14,84 @@ import io.github.ititus.math.permutation.Permutations;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static io.github.ititus.math.number.BigRationalConstants.ONE;
 
 public class ModuleTesting {
 
+    private final PrototypeSet<Lab> labs;
+    private final PrototypeSet<Module> modules;
+    private final PrototypeSet<CraftingMachine> craftingMachines;
+
     public static void main(String[] args) {
-        craftingMachine();
-        //labSpeed();
+        new ModuleTesting().craftingMachine();
+        //new ModuleTesting().labSpeed();
     }
 
-    private static void craftingMachine() {
+    private ModuleTesting() {
         Config.load(Path.of("config.json"));
         Config.offlineMode = true;
         Config.dumpLuaGlobals = false;
         FactorioData factorioData = FactorioData.loadFactorioData();
 
-        PrototypeSet<CraftingMachine> craftingMachines = factorioData.getCraftingMachines();
+        this.craftingMachines = factorioData.getCraftingMachines();
 
         PrototypeSet<Module> allModules = factorioData.getModules();
         Module speed3 = allModules.get("speed-module-3");
         Module prod3 = allModules.get("productivity-module-3");
-        PrototypeSet<Module> modules = new PrototypeSet<>(Module.class, List.of(speed3, prod3)).lock();
-        modules.forEach(System.out::println);
-        System.out.println();
+        this.modules = new PrototypeSet<>(Module.class, List.of(speed3, prod3)).lock();
+        //modules.forEach(System.out::println);
+        //System.out.println();
 
-        String machineName = "rocket-silo"; //"assembling-machine-3"; // "chemical-plant";
+        this.labs = factorioData.getLabs();
+    }
+
+    private static class MachineStats {
+
+        private final List<Module> modules;
+        private final ModuleEffect effect;
+        private final BigRational speed;
+        private final BigRational effectiveSpeed;
+        private final BigRational demand;
+
+        private MachineStats(List<Module> machineModules, BigRational baseCraftingSpeed, ModuleEffect outerEffect) {
+            this.modules = machineModules;
+            this.effect =
+                    machineModules.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
+            this.speed = baseCraftingSpeed.multiply(ONE.add(effect.getSpeedBonus()));
+            this.effectiveSpeed = speed.multiply(ONE.add(effect.getProductivityBonus()));
+            this.demand = ONE.divide(ONE.add(effect.getProductivityBonus()));
+        }
+
+        @Override
+        public String toString() {
+            return CollectionUtil.deepMap(modules, Module::getName) + ": speedBonus=" + effect.getSpeedBonus() + " | " +
+                    "productivityBonus=" + effect.getProductivityBonus() + " | speed=" + speed + " | effSpeed=" + effectiveSpeed + " | consumption=" + demand;
+        }
+    }
+
+    private void craftingMachine() {
+        // "electric-furnace"
+        printMachineStats("assembling-machine-3", 8);
+        printMachineStats("chemical-plant", 8);
+        printMachineStats("rocket-silo", 20);
+    }
+
+    private void printMachineStats(String machineName, int beaconCount) {
+        System.out.println(machineName + " with " + beaconCount + " beacons");
+        getMachineStats(machineName, beaconCount).forEach(System.out::println);
+        System.out.println();
+    }
+
+    private List<MachineStats> getMachineStats(String machineName, int beaconCount) {
         CraftingMachine machine = craftingMachines.get(machineName);
-        System.out.println(machine);
-        System.out.println();
+        //System.out.println(machine);
+        //System.out.println();
 
-        int beaconCount = 20;//8;
+        Module speed3 = modules.get("speed-module-3");
+        Module prod3 = modules.get("productivity-module-3");
 
         BigRational baseCraftingSpeed = machine.getCraftingSpeed();
         BigRational baseProductivityBonus = machine.getBaseProductivity();
@@ -58,14 +106,16 @@ public class ModuleTesting {
         ModuleEffect outerEffect =
                 machine.filter(beaconEffect.add(ModuleEffect.builder().productivity(baseProductivityBonus).build()));
 
-        System.out.println("baseCraftingSpeed=" + baseCraftingSpeed);
-        System.out.println("baseProductivityBonus=" + baseProductivityBonus);
-        System.out.println("baseEffectiveCraftingSpeed=" + baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(baseProductivityBonus)));
-        System.out.println("beaconEffect=" + beaconEffect);
-        System.out.println("outerEffect=" + outerEffect);
-        System.out.println("baseSpeed=" + baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(outerEffect.getSpeedBonus())));
-        System.out.println("baseEffectiveSpeed=" + baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(outerEffect.getSpeedBonus())).multiply(BigRationalConstants.ONE.add(outerEffect.getProductivityBonus())));
-        System.out.println();
+        //System.out.println("baseCraftingSpeed=" + baseCraftingSpeed);
+        //System.out.println("baseProductivityBonus=" + baseProductivityBonus);
+        //System.out.println("baseEffectiveCraftingSpeed=" + baseCraftingSpeed.multiply(ONE.add
+        // (baseProductivityBonus)));
+        //System.out.println("beaconEffect=" + beaconEffect);
+        //System.out.println("outerEffect=" + outerEffect);
+        //System.out.println("baseSpeed=" + baseCraftingSpeed.multiply(ONE.add(outerEffect.getSpeedBonus())));
+        //System.out.println("baseEffectiveSpeed=" + baseCraftingSpeed.multiply(ONE.add(outerEffect.getSpeedBonus()))
+        // .multiply(ONE.add(outerEffect.getProductivityBonus())));
+        //System.out.println();
 
         int slots = machine.getModuleSpecification().getModuleSlots();
         System.out.println("moduleSlots=" + slots);
@@ -74,35 +124,17 @@ public class ModuleTesting {
         // permutations.stream().map(l -> CollectionUtil.deepMap(l, Module::getName)).forEachOrdered(System
         // .out::println);
 
-        permutations.stream()
-                .map(p -> new Object() {
-                    List<Module> modules = p;
-                    ModuleEffect effect =
-                            p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
-                    BigRational speed =
-                            baseCraftingSpeed.multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
-                    BigRational effectiveSpeed =
-                            speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
-                    BigRational demand =
-                            BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
-                })
+        return permutations.stream()
+                .map(p -> new MachineStats(p, baseCraftingSpeed, outerEffect))
                 .sorted(Comparator.comparing(o -> o.effectiveSpeed))
-                .map(o -> CollectionUtil.deepMap(o.modules, Module::getName) + ": speedBonus=" + o.effect.getSpeedBonus() + " | productivityBonus=" + o.effect.getProductivityBonus() + " | speed=" + o.speed + " | effSpeed=" + o.effectiveSpeed + " | consumption=" + o.demand)
-                .forEachOrdered(System.out::println);
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    private static void labSpeed() {
-        Config.load(Path.of("config.json"));
-        Config.offlineMode = true;
-        Config.dumpLuaGlobals = false;
-        FactorioData factorioData = FactorioData.loadFactorioData();
+    private void labSpeed() {
+        Lab lab = labs.get("lab");
 
-        Lab lab = factorioData.getLabs().get("lab");
-
-        PrototypeSet<Module> allModules = factorioData.getModules();
-        Module speed3 = allModules.get("speed-module-3");
-        Module prod3 = allModules.get("productivity-module-3");
-        PrototypeSet<Module> modules = new PrototypeSet<>(Module.class, List.of(speed3, prod3)).lock();
+        Module speed3 = modules.get("speed-module-3");
+        Module prod3 = modules.get("productivity-module-3");
 
         int beaconCount = 12;
         ModuleEffect beaconEffect = IntStream.range(0, beaconCount)
@@ -129,15 +161,14 @@ public class ModuleTesting {
                     ModuleEffect effect =
                             p.stream().map(Module::getEffect).reduce(ModuleEffect::add).orElse(ModuleEffect.NO_EFFECT).add(outerEffect);
                     BigRational speed =
-                            baseResearchSpeed.multiply(BigRationalConstants.ONE.add(researchSpeedBonusThroughTech)).multiply(BigRationalConstants.ONE.add(effect.getSpeedBonus()));
+                            baseResearchSpeed.multiply(ONE.add(researchSpeedBonusThroughTech)).multiply(ONE.add(effect.getSpeedBonus()));
                     BigRational effectiveSpeed =
-                            speed.multiply(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                            speed.multiply(ONE.add(effect.getProductivityBonus()));
                     BigRational demand =
-                            BigRationalConstants.ONE.divide(BigRationalConstants.ONE.add(effect.getProductivityBonus()));
+                            ONE.divide(ONE.add(effect.getProductivityBonus()));
                 })
                 .sorted(Comparator.comparing(o -> o.effectiveSpeed))
                 .map(o -> CollectionUtil.deepMap(o.modules, Module::getName) + ": speedBonus=" + o.effect.getSpeedBonus() + " | productivityBonus=" + o.effect.getProductivityBonus() + " | speed=" + o.speed + " | effSpeed=" + o.effectiveSpeed + " | consumption=" + o.demand)
                 .forEachOrdered(System.out::println);
-
     }
 }
