@@ -33,9 +33,9 @@ public final class Recipe extends Prototype {
         } else if (normal.istable() && expensive.istable()) {
             this.normal = new RecipeData(normal.checktable());
             this.expensive = new RecipeData(expensive.checktable());
-        } else if (normal.istable() && expensive.toboolean()) {
+        } else if (normal.istable() && !expensive.toboolean()) {
             this.normal = this.expensive = new RecipeData(normal.checktable());
-        } else if (normal.toboolean() && expensive.istable()) {
+        } else if (!normal.toboolean() && expensive.istable()) {
             this.normal = this.expensive = new RecipeData(expensive.checktable());
         } else {
             throw new RuntimeException();
