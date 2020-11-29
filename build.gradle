@@ -6,10 +6,12 @@ plugins {
 group = 'io.github.ititus'
 version = '1.0.0'
 
+wrapper {
+    gradleVersion '6.7.1'
+}
+
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(15)
-    }
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
 
     withSourcesJar()
     withJavadocJar()
@@ -23,13 +25,13 @@ repositories {
 dependencies {
     // implementation 'org.apache.bcel:bcel:6.3.1'
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation 'org.json:json:20200518'
-    implementation 'io.github.ititus:ititus-commons:1.0.0'
+    implementation 'org.json:json:20201115'
+    implementation 'io.github.ititus:ititus-commons:1.2.0'
 
     testImplementation platform('org.junit:junit-bom:5.7.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.assertj:assertj-core:3.18.0'
-    testImplementation 'org.mockito:mockito-core:3.6.0'
+    testImplementation 'org.assertj:assertj-core:3.18.1'
+    testImplementation 'org.mockito:mockito-core:3.6.28'
 }
 
 test {
@@ -39,4 +41,3 @@ test {
 application {
     mainClass = 'io.github.ititus.factorio.recipes.FactorioRecipes'
 }
-

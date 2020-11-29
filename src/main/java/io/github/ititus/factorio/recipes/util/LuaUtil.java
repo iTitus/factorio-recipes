@@ -1,7 +1,7 @@
 package io.github.ititus.factorio.recipes.util;
 
 import io.github.ititus.factorio.recipes.FactorioRecipes;
-import io.github.ititus.function.BiIntTFunction;
+import io.github.ititus.function.BiIntObjFunction;
 import io.github.ititus.math.number.BigRational;
 import org.luaj.vm2.*;
 
@@ -111,14 +111,15 @@ public final class LuaUtil {
     }
 
     public static <T> List<T> getList(LuaTable t, String key, Function<LuaTable, T> fct) {
-        return List.copyOf(luaTableToList(t.rawget(key).opttable(LuaTable.tableOf()), (k_, v) -> fct.apply(v.checktable())));
+        return List.copyOf(luaTableToList(t.rawget(key).opttable(LuaTable.tableOf()),
+                (k_, v) -> fct.apply(v.checktable())));
     }
 
     public static Set<String> getStringSet(LuaTable t, String key) {
         return Set.copyOf(luaTableToSet(t.rawget(key).opttable(LuaTable.tableOf()), (k_, v) -> v.checkjstring()));
     }
 
-    public static <T> List<T> luaArrayToList(LuaTable t, BiIntTFunction<LuaValue, T> fct) {
+    public static <T> List<T> luaArrayToList(LuaTable t, BiIntObjFunction<LuaValue, T> fct) {
         List<T> list = new ArrayList<>();
 
         LuaValue k = LuaInteger.ZERO;
@@ -136,7 +137,7 @@ public final class LuaUtil {
         return list;
     }
 
-    public static <T> Set<T> luaArrayToSet(LuaTable t, BiIntTFunction<LuaValue, T> fct) {
+    public static <T> Set<T> luaArrayToSet(LuaTable t, BiIntObjFunction<LuaValue, T> fct) {
         Set<T> set = new HashSet<>();
 
         LuaValue k = LuaInteger.ZERO;
@@ -190,7 +191,8 @@ public final class LuaUtil {
         return set;
     }
 
-    public static <K, V> Map<K, V> luaTableToMap(LuaTable t, BiFunction<LuaValue, LuaValue, K> keyFct, BiFunction<LuaValue, LuaValue, V> valueFct) {
+    public static <K, V> Map<K, V> luaTableToMap(LuaTable t, BiFunction<LuaValue, LuaValue, K> keyFct,
+                                                 BiFunction<LuaValue, LuaValue, V> valueFct) {
         Map<K, V> map = new HashMap<>();
 
         LuaValue key = LuaValue.NIL;

@@ -32,7 +32,7 @@ public class ModuleTesting {
 
     private ModuleTesting() {
         Config.load(Path.of("config.json"));
-        Config.offlineMode = true;
+        Config.offlineMode = false;
         Config.dumpLuaGlobals = false;
         FactorioData factorioData = FactorioData.loadFactorioData();
 
