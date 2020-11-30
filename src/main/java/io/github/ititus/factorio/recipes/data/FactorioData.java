@@ -18,11 +18,15 @@ import io.github.ititus.math.time.StopWatch;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.PackageLib;
+import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,10 +39,14 @@ import java.util.stream.Stream;
 
 public final class FactorioData {
 
-    private static final String FACTORIO_DATA_QUERY_URL = "https://api.github.com/repos/wube/factorio-data/git/trees/master?recursive=1";
-    private static final String FACTORIO_DATA_DOWNLOAD_URL = "https://raw.githubusercontent.com/wube/factorio-data/master/";
-    private static final String SERPENT_QUERY_URL = "https://api.github.com/repos/pkulchenko/serpent/git/trees/master?recursive=1";
-    private static final String SERPENT_DOWNLOAD_URL = "https://raw.githubusercontent.com/pkulchenko/serpent/master/src/serpent.lua";
+    private static final String FACTORIO_DATA_QUERY_URL =
+            "https://api.github.com/repos/wube/factorio-data/git/trees/master?recursive=1";
+    private static final String FACTORIO_DATA_DOWNLOAD_URL =
+            "https://raw.githubusercontent.com/wube/factorio-data/master/";
+    private static final String SERPENT_QUERY_URL =
+            "https://api.github.com/repos/pkulchenko/serpent/git/trees/master?recursive=1";
+    private static final String SERPENT_DOWNLOAD_URL =
+            "https://raw.githubusercontent.com/pkulchenko/serpent/master/src/serpent.lua";
 
     private final List<PrototypeSet<? extends Prototype>> prototypeSets = new ArrayList<>();
 
@@ -118,7 +126,8 @@ public final class FactorioData {
             for (int i = 0; i < serpentData.length(); i++) {
                 JSONObject serpentObject = serpentData.getJSONObject(i);
                 if (serpentObject.getString("path").equals("src/serpent.lua")) {
-                    jobs.add(new DownloadGitBlobSHA1Task(Config.factorioDataDir.resolve("serpent.lua"), serpentObject.getString("sha"), SERPENT_DOWNLOAD_URL, false));
+                    jobs.add(new DownloadGitBlobSHA1Task(Config.factorioDataDir.resolve("serpent.lua"),
+                            serpentObject.getString("sha"), SERPENT_DOWNLOAD_URL, false));
                     break;
                 }
             }
@@ -134,7 +143,8 @@ public final class FactorioData {
 
                 if (Objects.equals(obj.getString("type"), "blob")) {
                     String path = obj.getString("path");
-                    jobs.add(new DownloadGitBlobSHA1Task(Config.factorioDataDir.resolve(path), obj.getString("sha"), FACTORIO_DATA_DOWNLOAD_URL + path, false));
+                    jobs.add(new DownloadGitBlobSHA1Task(Config.factorioDataDir.resolve(path), obj.getString("sha"),
+                            FACTORIO_DATA_DOWNLOAD_URL + path, false));
                 }
             }
         }
@@ -162,20 +172,90 @@ public final class FactorioData {
         Globals globals = JsePlatform.debugGlobals();
         // LuaJC.install(globals);
 
-        LuaTable serpent = LuaUtil.loadLuaFile(globals, Config.factorioDataDir, "serpent.lua").checktable();
-        globals.set("serpent", serpent);
-        LuaUtil.getTable(LuaUtil.getTable(globals, "package"), "loaded").set("serpent", serpent);
+        LuaFunction require = globals.get("require").checkfunction();
 
-        LuaUtil.loadLuaFile(globals, null, "defines.lua");
-        LuaUtil.loadLuaFile(globals, Config.factorioDataDir, "core/lualib/dataloader.lua");
+        String FILE_SEP = System.getProperty("file.separator");
+        // copied from LuaJ
+        // changed: resolve __mod-name__ to mod-name
+        globals.get("package").set("searchpath", new VarArgFunction() {
+            public Varargs invoke(Varargs va) {
+                String moduleToSearch = va.checkjstring(1);
+                String luaPath = va.checkjstring(2);
+                char luaPathSeparator = va.optjstring(3, ".").charAt(0);
+                char filePathSeparator = va.optjstring(4, FILE_SEP).charAt(0);
+
+                moduleToSearch = moduleToSearch.replace(luaPathSeparator, filePathSeparator);
+
+                // resolve mod dependencies, factorio data dir should be in lua path
+                moduleToSearch = moduleToSearch.replaceAll("__([0-9A-Za-z-_]+)__", "$1");
+
+                StringBuilder b = new StringBuilder();
+                int nextSeparator = -1;
+                do {
+                    int start = nextSeparator + 1;
+                    nextSeparator = luaPath.indexOf(';', start);
+                    if (nextSeparator < 0) {
+                        nextSeparator = luaPath.length();
+                    }
+
+                    String currentPath = luaPath.substring(start, nextSeparator);
+
+                    int replaceIndex = currentPath.indexOf('?');
+                    if (replaceIndex < 0) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    currentPath = currentPath.substring(0, replaceIndex)
+                            + moduleToSearch + currentPath.substring(replaceIndex + 1);
+
+                    InputStream is = globals.finder.findResource(currentPath);
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (IOException ignored) {
+                        }
+
+                        return valueOf(currentPath);
+                    }
+
+                    b.append("\n\t").append(currentPath);
+                } while (nextSeparator < luaPath.length());
+
+                return varargsOf(NIL, valueOf(b.toString()));
+            }
+        });
+
+        String factorioDataDir;
+        try {
+            factorioDataDir = Config.factorioDataDir.toRealPath().toString();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
+        globals.package_.setLuaPath(
+                PackageLib.DEFAULT_LUA_PATH + ";"
+                        + factorioDataDir + "/?.lua"
+        );
+        require.call("serpent");
+        globals.package_.setLuaPath(PackageLib.DEFAULT_LUA_PATH);
+
+        require.call("defines");
+
+        globals.package_.setLuaPath(
+                PackageLib.DEFAULT_LUA_PATH + ";"
+                        + factorioDataDir + "/core/lualib/?.lua"
+        );
+        require.call("dataloader");
+        globals.package_.setLuaPath(PackageLib.DEFAULT_LUA_PATH);
 
         for (String fileName : new String[] { "data.lua", "data-updates.lua", "data-final-fixes.lua" }) {
             for (String modName : new String[] { "core", "base" }) {
-                try {
-                    globals.package_.setLuaPath(Config.factorioDataDir.toRealPath().toString() + '/' + modName + "/?.lua;" + Config.factorioDataDir.toRealPath().toString() + "/core/lualib/?.lua");
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
+                globals.package_.setLuaPath(
+                        PackageLib.DEFAULT_LUA_PATH + ";"
+                                + factorioDataDir + "/?.lua;"
+                                + factorioDataDir + '/' + modName + "/?.lua;"
+                                + factorioDataDir + "/core/lualib/?.lua"
+                );
 
                 Path p = Path.of(modName, fileName);
                 if (Files.exists(Config.factorioDataDir.resolve(p))) {
