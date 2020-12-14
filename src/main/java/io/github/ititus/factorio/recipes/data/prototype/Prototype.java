@@ -45,7 +45,8 @@ public abstract class Prototype implements Comparable<Prototype>, Printable {
             return false;
         }
         Prototype prototype = (Prototype) o;
-        return Objects.equals(type, prototype.type) && Objects.equals(name, prototype.name) && Objects.equals(order, prototype.order);
+        return Objects.equals(type, prototype.type) && Objects.equals(name, prototype.name) && Objects.equals(order,
+                prototype.order);
     }
 
     @Override

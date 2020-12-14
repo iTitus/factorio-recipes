@@ -49,37 +49,6 @@ public final class ModuleEffect implements Printable {
         return new Builder();
     }
 
-    public static class Builder {
-
-        private BigRational consumptionBonus = BigRationalConstants.ZERO, productivityBonus =
-                BigRationalConstants.ZERO, pollutionBonus = BigRationalConstants.ZERO, speedBonus =
-                BigRationalConstants.ZERO;
-
-        public Builder consumption(BigRational consumptionBonus) {
-            this.consumptionBonus = consumptionBonus;
-            return this;
-        }
-
-        public Builder productivity(BigRational productivityBonus) {
-            this.productivityBonus = productivityBonus;
-            return this;
-        }
-
-        public Builder pollution(BigRational pollutionBonus) {
-            this.pollutionBonus = pollutionBonus;
-            return this;
-        }
-
-        public Builder speed(BigRational speedBonus) {
-            this.speedBonus = speedBonus;
-            return this;
-        }
-
-        public ModuleEffect build() {
-            return new ModuleEffect(consumptionBonus, productivityBonus, pollutionBonus, speedBonus);
-        }
-    }
-
     private static BigRational get(LuaTable t, String key) {
         LuaValue v1 = t.rawget(key);
         if (v1.isnil()) {
@@ -177,5 +146,36 @@ public final class ModuleEffect implements Printable {
     @Override
     public String toString() {
         return Printable.toPrintableString(this);
+    }
+
+    public static class Builder {
+
+        private BigRational consumptionBonus = BigRationalConstants.ZERO, productivityBonus =
+                BigRationalConstants.ZERO, pollutionBonus = BigRationalConstants.ZERO, speedBonus =
+                BigRationalConstants.ZERO;
+
+        public Builder consumption(BigRational consumptionBonus) {
+            this.consumptionBonus = consumptionBonus;
+            return this;
+        }
+
+        public Builder productivity(BigRational productivityBonus) {
+            this.productivityBonus = productivityBonus;
+            return this;
+        }
+
+        public Builder pollution(BigRational pollutionBonus) {
+            this.pollutionBonus = pollutionBonus;
+            return this;
+        }
+
+        public Builder speed(BigRational speedBonus) {
+            this.speedBonus = speedBonus;
+            return this;
+        }
+
+        public ModuleEffect build() {
+            return new ModuleEffect(consumptionBonus, productivityBonus, pollutionBonus, speedBonus);
+        }
     }
 }

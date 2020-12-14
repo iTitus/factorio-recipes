@@ -233,7 +233,8 @@ public final class PrototypeSet<T extends Prototype> implements SortedSet<T> {
             throw new IllegalStateException();
         }
 
-        return Spliterators.spliterator(sorted, Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.NONNULL | Spliterator.IMMUTABLE);
+        return Spliterators.spliterator(sorted,
+                Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.NONNULL | Spliterator.IMMUTABLE);
     }
 
     @Override

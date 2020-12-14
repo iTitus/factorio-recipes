@@ -24,12 +24,6 @@ public class ModuleTesting {
     private final PrototypeSet<Module> modules;
     private final PrototypeSet<CraftingMachine> craftingMachines;
 
-    public static void main(String[] args) {
-        ModuleTesting mt = new ModuleTesting();
-        mt.craftingMachine();
-        mt.labSpeed();
-    }
-
     private ModuleTesting() {
         Config.load(Path.of("config.json"));
         Config.offlineMode = false;
@@ -48,35 +42,10 @@ public class ModuleTesting {
         this.labs = factorioData.getLabs();
     }
 
-    private static class MachineStats {
-
-        private final List<Module> modules;
-        private final ModuleEffect effect;
-        private final BigRational speed;
-        private final BigRational effectiveSpeed;
-        private final BigRational demand;
-
-        private MachineStats(List<Module> machineModules, BigRational baseCraftingSpeed,
-                             BigRational baseProductivityBonus,
-                             BigRational speedBonusThroughTech, BigRational productivityBonusThroughTech,
-                             ModuleEffect beaconEffect) {
-            this.modules = machineModules;
-            this.effect = ModuleEffect.of(machineModules)
-                    .add(beaconEffect)
-                    .add(ModuleEffect.builder().productivity(baseProductivityBonus).build())
-                    .add(ModuleEffect.builder().productivity(productivityBonusThroughTech).build());
-            this.speed = baseCraftingSpeed
-                    .multiply(ONE.add(effect.getSpeedBonus()))
-                    .multiply(ONE.add(speedBonusThroughTech));
-            this.effectiveSpeed = speed.multiply(ONE.add(effect.getProductivityBonus()));
-            this.demand = ONE.divide(ONE.add(effect.getProductivityBonus()));
-        }
-
-        @Override
-        public String toString() {
-            return CollectionUtil.deepMap(modules, Module::getName) + ": speedBonus=" + effect.getSpeedBonus() + " | " +
-                    "productivityBonus=" + effect.getProductivityBonus() + " | speed=" + speed + " | effSpeed=" + effectiveSpeed + " | consumption=" + demand;
-        }
+    public static void main(String[] args) {
+        ModuleTesting mt = new ModuleTesting();
+        mt.craftingMachine();
+        mt.labSpeed();
     }
 
     private void craftingMachine() {
@@ -144,5 +113,36 @@ public class ModuleTesting {
                         productivityBonusThroughTech, beaconEffect))
                 .sorted(Comparator.comparing(o -> o.effectiveSpeed))
                 .forEachOrdered(System.out::println);
+    }
+
+    private static class MachineStats {
+
+        private final List<Module> modules;
+        private final ModuleEffect effect;
+        private final BigRational speed;
+        private final BigRational effectiveSpeed;
+        private final BigRational demand;
+
+        private MachineStats(List<Module> machineModules, BigRational baseCraftingSpeed,
+                             BigRational baseProductivityBonus,
+                             BigRational speedBonusThroughTech, BigRational productivityBonusThroughTech,
+                             ModuleEffect beaconEffect) {
+            this.modules = machineModules;
+            this.effect = ModuleEffect.of(machineModules)
+                    .add(beaconEffect)
+                    .add(ModuleEffect.builder().productivity(baseProductivityBonus).build())
+                    .add(ModuleEffect.builder().productivity(productivityBonusThroughTech).build());
+            this.speed = baseCraftingSpeed
+                    .multiply(ONE.add(effect.getSpeedBonus()))
+                    .multiply(ONE.add(speedBonusThroughTech));
+            this.effectiveSpeed = speed.multiply(ONE.add(effect.getProductivityBonus()));
+            this.demand = ONE.divide(ONE.add(effect.getProductivityBonus()));
+        }
+
+        @Override
+        public String toString() {
+            return CollectionUtil.deepMap(modules, Module::getName) + ": speedBonus=" + effect.getSpeedBonus() + " | " +
+                    "productivityBonus=" + effect.getProductivityBonus() + " | speed=" + speed + " | effSpeed=" + effectiveSpeed + " | consumption=" + demand;
+        }
     }
 }

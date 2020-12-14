@@ -75,12 +75,14 @@ public abstract class CraftingMachine extends EntityWithHealth {
             return false;
         }
         CraftingMachine that = (CraftingMachine) o;
-        return Objects.equals(craftingSpeed, that.craftingSpeed) && Objects.equals(baseProductivity, that.baseProductivity) && Objects.equals(recipeCategories, that.recipeCategories) && Objects.equals(allowedEffects, that.allowedEffects) && Objects.equals(moduleSpecification, that.moduleSpecification);
+        return Objects.equals(craftingSpeed, that.craftingSpeed) && Objects.equals(baseProductivity,
+                that.baseProductivity) && Objects.equals(recipeCategories, that.recipeCategories) && Objects.equals(allowedEffects, that.allowedEffects) && Objects.equals(moduleSpecification, that.moduleSpecification);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), craftingSpeed, baseProductivity, recipeCategories, allowedEffects, moduleSpecification);
+        return Objects.hash(super.hashCode(), craftingSpeed, baseProductivity, recipeCategories, allowedEffects,
+                moduleSpecification);
     }
 
     @Override

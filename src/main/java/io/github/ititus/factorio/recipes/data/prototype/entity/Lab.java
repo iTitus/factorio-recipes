@@ -52,7 +52,9 @@ public class Lab extends EntityWithHealth {
             return false;
         }
         Lab that = (Lab) o;
-        return Objects.equals(researchingSpeed, that.researchingSpeed) && Objects.equals(baseProductivity, that.baseProductivity) && Objects.equals(inputs, that.inputs) && Objects.equals(moduleSpecification, that.moduleSpecification);
+        return Objects.equals(researchingSpeed, that.researchingSpeed) && Objects.equals(baseProductivity,
+                that.baseProductivity) && Objects.equals(inputs, that.inputs) && Objects.equals(moduleSpecification,
+                that.moduleSpecification);
     }
 
     @Override

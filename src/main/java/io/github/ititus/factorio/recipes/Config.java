@@ -158,6 +158,7 @@ public class Config {
     }
 
     private static <T> Stream<T> stream(Iterable<T> iterable, int size) {
-        return StreamSupport.stream(Spliterators.spliterator(iterable.iterator(), size, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
+        return StreamSupport.stream(Spliterators.spliterator(iterable.iterator(), size,
+                Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
     }
 }

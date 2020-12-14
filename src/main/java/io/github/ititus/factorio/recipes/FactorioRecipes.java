@@ -44,8 +44,10 @@ public class FactorioRecipes {
 
         StopWatch s = StopWatch.createRunning();
 
-        List<Recipe> tempRecipeList = recipes.stream().filter(r -> Config.recipeWhitelist.contains(r.getName()) || (r.allowDecomposition(Config.mode) && r.getResults(Config.mode).size() == 1 && !r.getResults(Config.mode).get(0).isComplex())).collect(Collectors.toUnmodifiableList());
-        List<Recipe> removedComplex = recipes.stream().filter(r -> !tempRecipeList.contains(r)).collect(Collectors.toUnmodifiableList());
+        List<Recipe> tempRecipeList =
+                recipes.stream().filter(r -> Config.recipeWhitelist.contains(r.getName()) || (r.allowDecomposition(Config.mode) && r.getResults(Config.mode).size() == 1 && !r.getResults(Config.mode).get(0).isComplex())).collect(Collectors.toUnmodifiableList());
+        List<Recipe> removedComplex =
+                recipes.stream().filter(r -> !tempRecipeList.contains(r)).collect(Collectors.toUnmodifiableList());
 
         List<String> duplicates = tempRecipeList.stream().filter(r -> {
             Product p = r.getResults(Config.mode).get(0);
@@ -56,9 +58,11 @@ public class FactorioRecipes {
             }
             return false;
         }).map(Recipe::getName).filter(r -> !Config.recipeWhitelist.contains(r)).collect(Collectors.toUnmodifiableList());
-        List<Recipe> finalRecipeList = tempRecipeList.stream().filter(r -> !duplicates.contains(r.getName())).sorted().collect(Collectors.toUnmodifiableList());
+        List<Recipe> finalRecipeList =
+                tempRecipeList.stream().filter(r -> !duplicates.contains(r.getName())).sorted().collect(Collectors.toUnmodifiableList());
 
-        System.out.println("Ignored " + removedComplex.size() + " recipes due to cycle problems or multi/non-deterministic output:");
+        System.out.println("Ignored " + removedComplex.size() + " recipes due to cycle problems or " +
+                "multi/non-deterministic output:");
         System.out.println(removedComplex.stream().map(Recipe::getName).collect(Collectors.joining(", ")));
         System.out.println();
         System.out.println("Ignored " + duplicates.size() + " recipes due to duplicate outputs:");
@@ -79,7 +83,8 @@ public class FactorioRecipes {
             System.out.println();
             System.out.println("Module Categories:");
             for (ModuleCategory c : moduleCategories) {
-                System.out.println(c.getName() + '=' + modules.stream().filter(m -> Objects.equals(c.getName(), m.getCategory())).map(Prototype::getName).collect(Collectors.toList()));
+                System.out.println(c.getName() + '=' + modules.stream().filter(m -> Objects.equals(c.getName(),
+                        m.getCategory())).map(Prototype::getName).collect(Collectors.toList()));
             }
             System.out.println();
             System.out.println("Modules:");
@@ -95,7 +100,8 @@ public class FactorioRecipes {
         if (args.length > 0) {
             for (String item : args) {
                 System.out.println("#".repeat(80));
-                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, item);
+                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                        Config.craftingMachines, craftingMachines, item);
                 tree.findOptimalRatio();
             }
         } else {
@@ -103,36 +109,43 @@ public class FactorioRecipes {
                 if (!recipe.getName().startsWith("space-") && recipe.getName().endsWith("-science-pack")) {
                     System.out.println("#".repeat(80));
                     String outputItem = recipe.getName();
-                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, outputItem);
+                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                            Config.craftingMachines, craftingMachines, outputItem);
                     tree.findOptimalRatio();
                 } else if (recipe.getName().endsWith("-module-3")) {
                     System.out.println("#".repeat(80));
                     String outputItem = recipe.getName();
-                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, outputItem);
+                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                            Config.craftingMachines, craftingMachines, outputItem);
                     tree.findOptimalRatio();
                 } else if (recipe.getName().endsWith("-robot")) {
                     System.out.println("#".repeat(80));
                     String outputItem = recipe.getName();
-                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, outputItem);
+                    RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                            Config.craftingMachines, craftingMachines, outputItem);
                     tree.findOptimalRatio();
                 }
             }
 
             for (String misc : new String[] { "rail", "electric-engine-unit" }) {
                 System.out.println("#".repeat(80));
-                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, misc);
+                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                        Config.craftingMachines, craftingMachines, misc);
                 tree.findOptimalRatio();
             }
 
             for (String circuit : new String[] { "electronic-circuit", "advanced-circuit", "processing-unit" }) {
                 System.out.println("#".repeat(80));
-                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, circuit);
+                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                        Config.craftingMachines, craftingMachines, circuit);
                 tree.findOptimalRatio();
             }
 
-            for (String rocketPart : new String[] { "rocket-part", "rocket-control-unit", "low-density-structure", "rocket-fuel" }) {
+            for (String rocketPart : new String[] { "rocket-part", "rocket-control-unit", "low-density-structure",
+                    "rocket-fuel" }) {
                 System.out.println("#".repeat(80));
-                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems, Config.craftingMachines, craftingMachines, rocketPart);
+                RecipeGraph tree = new RecipeGraph(Config.mode, finalRecipeList, Config.baseItems,
+                        Config.craftingMachines, craftingMachines, rocketPart);
                 tree.findOptimalRatio();
             }
         }

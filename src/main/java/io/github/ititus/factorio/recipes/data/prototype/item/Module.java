@@ -57,7 +57,8 @@ public class Module extends Item {
             return false;
         }
         Module module = (Module) o;
-        return tier == module.tier && Objects.equals(category, module.category) && Objects.equals(effect, module.effect) && Objects.equals(limitation, module.limitation);
+        return tier == module.tier && Objects.equals(category, module.category) && Objects.equals(effect,
+                module.effect) && Objects.equals(limitation, module.limitation);
     }
 
     @Override
