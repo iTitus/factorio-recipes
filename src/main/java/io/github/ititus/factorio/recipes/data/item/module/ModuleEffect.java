@@ -17,6 +17,8 @@ import java.util.Objects;
 
 public final class ModuleEffect implements Printable {
 
+    private static final BigRational MINUS_FOUR_OVER_FIVE = BigRational.of(-4, 5);
+
     public static final ModuleEffect NO_EFFECT = new ModuleEffect(BigRationalConstants.ZERO,
             BigRationalConstants.ZERO, BigRationalConstants.ZERO, BigRationalConstants.ZERO);
 
@@ -78,7 +80,8 @@ public final class ModuleEffect implements Printable {
         if (o == NO_EFFECT) {
             return this;
         }
-        return new ModuleEffect(consumptionBonus.add(o.consumptionBonus).max(BigRationalConstants.MINUS_FOUR_OVER_FIVE), productivityBonus.add(o.productivityBonus), pollutionBonus.add(o.pollutionBonus), speedBonus.add(o.speedBonus));
+
+        return new ModuleEffect(consumptionBonus.add(o.consumptionBonus).max(MINUS_FOUR_OVER_FIVE), productivityBonus.add(o.productivityBonus), pollutionBonus.add(o.pollutionBonus), speedBonus.add(o.speedBonus));
     }
 
     public ModuleEffect multiply(BigRational r) {
@@ -87,8 +90,8 @@ public final class ModuleEffect implements Printable {
         } else if (r.isZero()) {
             return NO_EFFECT;
         }
-        return new ModuleEffect(consumptionBonus.multiply(r).max(BigRationalConstants.MINUS_FOUR_OVER_FIVE),
-                productivityBonus.multiply(r), pollutionBonus.multiply(r), speedBonus.multiply(r));
+
+        return new ModuleEffect(consumptionBonus.multiply(r).max(MINUS_FOUR_OVER_FIVE), productivityBonus.multiply(r), pollutionBonus.multiply(r), speedBonus.multiply(r));
     }
 
     public ModuleEffect beaconized() {
@@ -145,7 +148,7 @@ public final class ModuleEffect implements Printable {
 
     @Override
     public String toString() {
-        return Printable.toPrintableString(this);
+        return toPrintableString();
     }
 
     public static class Builder {

@@ -97,6 +97,6 @@ public final class RecipeData implements Printable {
 
     @Override
     public String toString() {
-        return Printable.toPrintableString(this);
+        return toPrintableString();
     }
 }
