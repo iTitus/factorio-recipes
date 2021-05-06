@@ -86,12 +86,12 @@ public abstract class CraftingMachine extends EntityWithHealth {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         super.getPrintableFields(fields);
-        fields.put("craftingSpeed", String.valueOf(craftingSpeed));
-        fields.put("baseProductivity", String.valueOf(baseProductivity));
-        fields.put("recipeCategories", String.valueOf(recipeCategories));
-        fields.put("allowedEffects", String.valueOf(allowedEffects));
-        fields.put("moduleSpecification", String.valueOf(moduleSpecification));
+        fields.put("craftingSpeed", craftingSpeed);
+        fields.put("baseProductivity", baseProductivity);
+        fields.put("recipeCategories", recipeCategories);
+        fields.put("allowedEffects", allowedEffects);
+        fields.put("moduleSpecification", moduleSpecification);
     }
 }

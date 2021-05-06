@@ -116,14 +116,14 @@ public final class Product implements Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         fields.put("type", type);
         fields.put("name", name);
-        fields.put("amount", String.valueOf(amount));
+        fields.put("amount", amount);
         if (isComplex()) {
-            fields.put("amountMin", String.valueOf(amountMin));
-            fields.put("amountMax", String.valueOf(amountMax));
-            fields.put("probability", String.valueOf(probability));
+            fields.put("amountMin", amountMin);
+            fields.put("amountMax", amountMax);
+            fields.put("probability", probability);
         }
     }
 

@@ -42,8 +42,8 @@ public final class ModuleSpecification implements Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
-        fields.put("moduleSlots", String.valueOf(moduleSlots));
+    public void getPrintableFields(Map<String, Object> fields) {
+        fields.put("moduleSlots", moduleSlots);
     }
 
     @Override

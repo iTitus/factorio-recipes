@@ -60,7 +60,7 @@ public abstract class Prototype implements Comparable<Prototype>, Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         // type is the prefix
         fields.put("name", name);
         fields.put("order", order);

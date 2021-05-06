@@ -67,13 +67,13 @@ public class Module extends Item {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         super.getPrintableFields(fields);
         fields.put("category", category);
-        fields.put("tier", String.valueOf(tier));
-        fields.put("effect", String.valueOf(effect));
+        fields.put("tier", tier);
+        fields.put("effect", effect);
         if (!limitation.isEmpty()) {
-            fields.put("limitation", String.valueOf(limitation));
+            fields.put("limitation", limitation);
         }
     }
 }

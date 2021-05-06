@@ -87,10 +87,10 @@ public final class Ingredient implements Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         fields.put("type", type);
         fields.put("name", name);
-        fields.put("amount", String.valueOf(amount));
+        fields.put("amount", amount);
     }
 
     @Override

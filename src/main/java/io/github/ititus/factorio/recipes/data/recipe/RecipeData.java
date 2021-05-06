@@ -88,11 +88,11 @@ public final class RecipeData implements Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
-        fields.put("ingredients", String.valueOf(ingredients));
-        fields.put("results", String.valueOf(results));
-        fields.put("time", String.valueOf(time));
-        fields.put("allowDecomposition", String.valueOf(allowDecomposition));
+    public void getPrintableFields(Map<String, Object> fields) {
+        fields.put("ingredients", ingredients);
+        fields.put("results", results);
+        fields.put("time", time);
+        fields.put("allowDecomposition", allowDecomposition);
     }
 
     @Override

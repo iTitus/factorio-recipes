@@ -131,18 +131,18 @@ public final class ModuleEffect implements Printable {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         if (!BigRationalConstants.ZERO.equals(consumptionBonus)) {
-            fields.put("consumptionBonus", String.valueOf(consumptionBonus));
+            fields.put("consumptionBonus", consumptionBonus);
         }
         if (!BigRationalConstants.ZERO.equals(productivityBonus)) {
-            fields.put("productivityBonus", String.valueOf(productivityBonus));
+            fields.put("productivityBonus", productivityBonus);
         }
         if (!BigRationalConstants.ZERO.equals(pollutionBonus)) {
-            fields.put("pollutionBonus", String.valueOf(pollutionBonus));
+            fields.put("pollutionBonus", pollutionBonus);
         }
         if (!BigRationalConstants.ZERO.equals(speedBonus)) {
-            fields.put("speedBonus", String.valueOf(speedBonus));
+            fields.put("speedBonus", speedBonus);
         }
     }
 

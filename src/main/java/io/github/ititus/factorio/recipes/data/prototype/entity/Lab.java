@@ -63,11 +63,11 @@ public class Lab extends EntityWithHealth {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         super.getPrintableFields(fields);
-        fields.put("researchingSpeed", String.valueOf(researchingSpeed));
-        fields.put("baseProductivity", String.valueOf(baseProductivity));
-        fields.put("inputs", String.valueOf(inputs));
-        fields.put("moduleSpecification", String.valueOf(moduleSpecification));
+        fields.put("researchingSpeed", researchingSpeed);
+        fields.put("baseProductivity", baseProductivity);
+        fields.put("inputs", inputs);
+        fields.put("moduleSpecification", moduleSpecification);
     }
 }

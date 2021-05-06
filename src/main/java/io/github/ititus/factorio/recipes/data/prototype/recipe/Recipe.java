@@ -90,14 +90,14 @@ public final class Recipe extends Prototype {
     }
 
     @Override
-    public void getPrintableFields(Map<String, String> fields) {
+    public void getPrintableFields(Map<String, Object> fields) {
         super.getPrintableFields(fields);
         fields.put("category", category);
         if (normal == expensive) {
-            fields.put("recipe", normal.toString());
+            fields.put("recipe", normal);
         } else {
-            fields.put("normal", normal.toString());
-            fields.put("expensive", expensive.toString());
+            fields.put("normal", normal);
+            fields.put("expensive", expensive);
         }
     }
 }
