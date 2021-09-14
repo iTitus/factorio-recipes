@@ -7,7 +7,7 @@ group = 'io.github.ititus'
 version = '1.0.0'
 
 wrapper {
-    gradleVersion '7.1'
+    gradleVersion '7.2'
 }
 
 java {
