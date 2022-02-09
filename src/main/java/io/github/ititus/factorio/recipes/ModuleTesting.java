@@ -1,22 +1,22 @@
 package io.github.ititus.factorio.recipes;
 
-import io.github.ititus.data.CollectionUtil;
+import io.github.ititus.commons.data.CollectionUtil;
 import io.github.ititus.factorio.recipes.data.FactorioData;
 import io.github.ititus.factorio.recipes.data.item.module.ModuleEffect;
 import io.github.ititus.factorio.recipes.data.prototype.PrototypeSet;
 import io.github.ititus.factorio.recipes.data.prototype.entity.CraftingMachine;
 import io.github.ititus.factorio.recipes.data.prototype.entity.Lab;
 import io.github.ititus.factorio.recipes.data.prototype.item.Module;
-import io.github.ititus.math.number.BigRational;
-import io.github.ititus.math.permutation.Permutations;
+import io.github.ititus.commons.math.number.BigRational;
+import io.github.ititus.commons.math.permutation.Permutations;
 
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.github.ititus.math.number.BigRationalConstants.ONE;
-import static io.github.ititus.math.number.BigRationalConstants.ZERO;
+import static io.github.ititus.commons.math.number.BigRationalConstants.ONE;
+import static io.github.ititus.commons.math.number.BigRationalConstants.ZERO;
 
 public class ModuleTesting {
 

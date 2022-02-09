@@ -1,7 +1,7 @@
 package io.github.ititus.factorio.recipes.util.task;
 
-import io.github.ititus.io.IO;
-import io.github.ititus.math.hash.Hashing;
+import io.github.ititus.commons.io.IO;
+import io.github.ititus.commons.math.hash.Hashing;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

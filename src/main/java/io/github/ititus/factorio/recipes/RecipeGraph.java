@@ -1,14 +1,14 @@
 package io.github.ititus.factorio.recipes;
 
-import io.github.ititus.data.pair.Pair;
+import io.github.ititus.commons.data.pair.Pair;
 import io.github.ititus.factorio.recipes.data.prototype.PrototypeSet;
 import io.github.ititus.factorio.recipes.data.prototype.entity.CraftingMachine;
 import io.github.ititus.factorio.recipes.data.prototype.recipe.Recipe;
 import io.github.ititus.factorio.recipes.data.recipe.Ingredient;
 import io.github.ititus.factorio.recipes.data.recipe.Mode;
 import io.github.ititus.factorio.recipes.data.recipe.Product;
-import io.github.ititus.math.hash.Hashing;
-import io.github.ititus.math.number.BigRational;
+import io.github.ititus.commons.math.hash.Hashing;
+import io.github.ititus.commons.math.number.BigRational;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

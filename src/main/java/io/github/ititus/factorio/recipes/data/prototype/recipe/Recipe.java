@@ -6,7 +6,7 @@ import io.github.ititus.factorio.recipes.data.recipe.Mode;
 import io.github.ititus.factorio.recipes.data.recipe.Product;
 import io.github.ititus.factorio.recipes.data.recipe.RecipeData;
 import io.github.ititus.factorio.recipes.util.LuaUtil;
-import io.github.ititus.math.number.BigRational;
+import io.github.ititus.commons.math.number.BigRational;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 

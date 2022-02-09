@@ -1,6 +1,6 @@
 package io.github.ititus.factorio.recipes.data.prototype;
 
-import io.github.ititus.data.Printable;
+import io.github.ititus.commons.data.Printable;
 import io.github.ititus.factorio.recipes.util.LuaUtil;
 import org.luaj.vm2.LuaTable;
 

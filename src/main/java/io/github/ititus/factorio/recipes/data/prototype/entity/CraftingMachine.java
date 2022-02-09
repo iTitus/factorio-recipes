@@ -3,8 +3,8 @@ package io.github.ititus.factorio.recipes.data.prototype.entity;
 import io.github.ititus.factorio.recipes.data.item.module.ModuleEffect;
 import io.github.ititus.factorio.recipes.data.item.module.ModuleSpecification;
 import io.github.ititus.factorio.recipes.util.LuaUtil;
-import io.github.ititus.math.number.BigRational;
-import io.github.ititus.math.number.BigRationalConstants;
+import io.github.ititus.commons.math.number.BigRational;
+import io.github.ititus.commons.math.number.BigRationalConstants;
 import org.luaj.vm2.LuaTable;
 
 import java.util.Map;

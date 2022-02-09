@@ -1,8 +1,8 @@
 package io.github.ititus.factorio.recipes.util;
 
 import io.github.ititus.factorio.recipes.FactorioRecipes;
-import io.github.ititus.function.BiIntObjFunction;
-import io.github.ititus.math.number.BigRational;
+import io.github.ititus.commons.function.BiIntObjFunction;
+import io.github.ititus.commons.math.number.BigRational;
 import org.luaj.vm2.*;
 
 import java.io.IOException;

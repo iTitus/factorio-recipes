@@ -1,10 +1,10 @@
 package io.github.ititus.factorio.recipes.data.recipe;
 
-import io.github.ititus.data.Printable;
+import io.github.ititus.commons.data.Printable;
 import io.github.ititus.factorio.recipes.FactorioRecipes;
 import io.github.ititus.factorio.recipes.util.LuaUtil;
-import io.github.ititus.math.number.BigRational;
-import io.github.ititus.math.number.BigRationalConstants;
+import io.github.ititus.commons.math.number.BigRational;
+import io.github.ititus.commons.math.number.BigRationalConstants;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 

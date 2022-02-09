@@ -1,7 +1,6 @@
 package io.github.ititus.factorio.recipes.data.prototype;
 
-
-import io.github.ititus.data.ImmutableIterator;
+import io.github.ititus.commons.data.ImmutableIterator;
 
 import java.util.*;
 

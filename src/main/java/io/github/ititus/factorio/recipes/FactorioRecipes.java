@@ -9,8 +9,8 @@ import io.github.ititus.factorio.recipes.data.prototype.entity.CraftingMachine;
 import io.github.ititus.factorio.recipes.data.prototype.item.Module;
 import io.github.ititus.factorio.recipes.data.prototype.recipe.Recipe;
 import io.github.ititus.factorio.recipes.data.recipe.Product;
-import io.github.ititus.math.time.DurationFormatter;
-import io.github.ititus.math.time.StopWatch;
+import io.github.ititus.commons.math.time.DurationFormatter;
+import io.github.ititus.commons.math.time.StopWatch;
 
 import java.nio.file.Path;
 import java.util.Arrays;

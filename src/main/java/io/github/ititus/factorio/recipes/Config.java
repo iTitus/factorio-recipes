@@ -1,8 +1,8 @@
 package io.github.ititus.factorio.recipes;
 
 import io.github.ititus.factorio.recipes.data.recipe.Mode;
-import io.github.ititus.math.time.DurationFormatter;
-import io.github.ititus.math.time.StopWatch;
+import io.github.ititus.commons.math.time.DurationFormatter;
+import io.github.ititus.commons.math.time.StopWatch;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
