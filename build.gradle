@@ -7,11 +7,13 @@ group = 'io.github.ititus'
 version = '1.0.0'
 
 wrapper {
-    gradleVersion '7.2'
+    gradleVersion '7.4'
 }
 
 java {
-    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
@@ -19,10 +21,10 @@ repositories {
 }
 
 dependencies {
-    // implementation 'org.apache.bcel:bcel:6.3.1'
+    // implementation 'org.apache.bcel:bcel:6.5.0'
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation 'org.json:json:20211205'
-    implementation 'io.github.ititus:ititus-commons:1.5.14'
+    implementation 'io.github.ititus:ititus-commons:2.0.1'
 
     testImplementation platform('org.junit:junit-bom:5.8.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
