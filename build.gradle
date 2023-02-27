@@ -23,7 +23,7 @@ repositories {
 dependencies {
     // implementation 'org.apache.bcel:bcel:6.5.0'
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation 'org.json:json:20220924'
+    implementation 'org.json:json:20230227'
     implementation 'io.github.ititus:ititus-commons:2.3.3'
 
     testImplementation platform('org.junit:junit-bom:5.9.2')
