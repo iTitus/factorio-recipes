@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        java-version: [ 17 ]
-        distribution: [ adopt ]
+        java-version: [ 21 ]
+        distribution: [ temurin ]
 
     runs-on: ${{ matrix.os }}
 
